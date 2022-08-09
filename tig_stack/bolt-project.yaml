@@ -13,3 +13,6 @@ modules:
   - git: https://github.com/prolixalias/puppet-hostname.git
     ref: 'feature_epp_and_minor_refactor'
   # - quadriq-influxdb
+ 
+apply-settings:
+  ssldir: /etc/puppetlabs/puppet/ssl
