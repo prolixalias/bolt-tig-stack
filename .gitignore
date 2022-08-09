@@ -4,13 +4,18 @@
 *.gem
 *.rbc
 /.config
-/coverage/
 /InstalledFiles
+/coverage/
 /pkg/
-/spec/reports/
 /spec/examples.txt
+/spec/reports/
 /test/tmp/
 /test/version_tmp/
+/tig_stack/.modules/
+/tig_stack/.plan_cache.json
+/tig_stack/.task_cache.json
+/tig_stack/Puppetfile
+/tig_stack/bolt-debug.log
 /tmp/
 
 # Used by dotenv library to load environment variables.

@@ -1,32 +1,47 @@
-class tig::telegraf (
-  String $influx_host,
-  String $password = $tig::params::influxdb_password,
-  String $database = $tig::params::influxdb_database,
-  String $username = $tig::params::influxdb_user,
-) inherits ::tig::params {
+#
 
-  $influx_url = "http://${influx_host}:8086"
+# @param [Array] inputs
+#   xxx
+# @param [Sensitive[String[1]]] influxdb_password
+#   xxx
+# @param [String] influx_host
+#   xxx
+# @param [String] influxdb_database
+#   xxx
+# @param [String] influxdb_username
+#   xxx
+
+#
+class tig::telegraf (
+  Array $inputs,
+  Sensitive[String[1]] $influxdb_password,
+  String $influx_host,
+  String $influxdb_database,
+  String $influxdb_username,
+) {
+  $influxdb_url = "http://${influx_host}:8086"
 
   class { 'telegraf':
-    hostname => $facts['hostname'],
+    hostname => $facts['networking']['hostname'],
     outputs  => {
-        'influxdb' => [
-            {
-                'urls'     => [ $influx_url ],
-                'database' => $database,
-                'username' => $username,
-                'password' => $password,
-            }
-        ]
+      'influxdb' => [
+        {
+          'urls'     => [$influxdb_url],
+          'database' => $influxdb_database,
+          'username' => $influxdb_username,
+          'password' => $influxdb_password,
+        }
+      ],
     },
   }
 
-  telegraf::input{ 'cpu':
-    options => [{ 'percpu' => true, 'totalcpu' => true, }]
-  }
+  # telegraf::input { 'cpu':
+  #   options => [{ 'percpu' => true, 'totalcpu' => true, }],
+  # }
 
-  ['disk', 'io', 'net', 'swap', 'system', 'mem', 'processes', 'kernel' ].each |$plug| {
-    telegraf::input{ $plug:
-     options => [{}]}
+  $inputs.each | String $input, Hash $options | {
+    telegraf::input { $input:
+      options => [$options],
+    }
   }
 }

@@ -1,6 +1,65 @@
 ---
-tig::telegraf::database: "bolt"
-tig::telegraf::username: "bolt"
-# In the real world encrypt these with hiera eyaml or store externally
-tig::params::influxdb_password: "hunter2"
-tig::params::grafana_password: "boltIsAwesome"
+
+lookup_options:
+  tig::dashboards::influxdb_password:
+    convert_to: "Sensitive"
+  tig::influxdb::password:
+    convert_to: "Sensitive"
+  tig::telegraph::influxdb_password:
+    convert_to: "Sensitive"
+  tig::influxdb::token:
+    convert_to: "Sensitive"
+
+tig::dashboards::grafana_password: "%{lookup('tig::grafana::password')}"
+tig::dashboards::grafana_url: "%{lookup('tig::grafana::url')}"
+tig::dashboards::grafana_user: "%{lookup('tig::grafana::user')}"
+tig::dashboards::influxdb_database: "%{lookup('tig::influxdb::database')}"
+tig::dashboards::influxdb_password: "%{lookup('tig::influxdb::password')}"
+tig::dashboards::influxdb_username: "%{lookup('tig::influxdb::username')}"
+
+tig::grafana::cfg_app_mode: 'production'
+tig::grafana::cfg_database_name: 'grafana'
+tig::grafana::cfg_database_type: 'sqlite3'
+tig::grafana::cfg_server_http_port: 8080
+tig::grafana::password: 'boltIsAwesome'
+tig::grafana::url: 'http://localhost:8080'
+tig::grafana::user: 'bolt'
+
+tig::influxdb::bucket: 'bolt'
+tig::influxdb::bucket_labels:
+  - 'bolt'
+  - 'monitoring'
+tig::influxdb::domain: 'rybamarine.com'
+tig::influxdb::host: 'localhost' # 'target0.rybamarine.com'
+tig::influxdb::manage_repo: true
+tig::influxdb::manage_setup: true
+tig::influxdb::manage_ssl: true
+tig::influxdb::org: 'puppetlabs'
+# tig::influxdb::package_archive_source: = 'https://dl.influxdata.com/influxdb/releases/influxdb2-2.3.0-linux-amd64.tar.gz',
+tig::influxdb::package_repo_name: 'influxdb2'
+tig::influxdb::package_version: '2.3.0-1'
+tig::influxdb::password: 'hunter2'
+tig::influxdb::port: 8086
+tig::influxdb::ssl_ca_file: "/etc/letsencrypt/config/archive/target0.rybamarine.com/fullchain1.pem" # '/etc/influxdb/ca.pem'
+tig::influxdb::ssl_cert_file: "/etc/letsencrypt/config/archive/target0.rybamarine.com/cert1.pem" # '/etc/influxdb/cert.pem'
+tig::influxdb::ssl_key_file: "/etc/letsencrypt/config/archive/target0.rybamarine.com/privkey1.pem" # '/etc/influxdb/key.pem'
+tig::influxdb::token: 'fIMU7UTYTJW4i20ecuG8MlaopGHCuy9naTqXFgXAbYk7DPzt5hf7Jo8Ghi5hmzXczOhPYij8p3fC87pKcoYx5237mgYqpnVBcGIS'
+tig::influxdb::token_file: '/root/.influxdb_token'
+tig::influxdb::use_ssl: true
+tig::influxdb::username: 'bolt'
+
+tig::telegraf::influxdb_database: "%{lookup('tig::influxdb::database')"
+tig::telegraf::influxdb_password: "%{lookup('tig::influxdb::password')"
+tig::telegraf::influxdb_username: "%{lookup('tig::influxdb::username')"
+tig::telegraf::inputs:
+  - 'cpu':
+    percpu: true
+    totalcpu: true
+  - 'disk'
+  - 'io'
+  - 'kernel'
+  - 'mem'
+  - 'net'
+  - 'processes'
+  - 'swap'
+  - 'system'

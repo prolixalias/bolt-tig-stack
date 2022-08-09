@@ -2,8 +2,7 @@
 
 This repo houses a Bolt project that you can use to Deploy a TIG stack.
 
-For more information, see [Deploy a TIG stack with
-Bolt](https://puppet.com/docs/bolt/latest/tig_stack.html)
+For more information, see [Deploy a TIG stack with Bolt](https://puppet.com/docs/bolt/latest/tig_stack.html)
 
 ## About Bolt
 

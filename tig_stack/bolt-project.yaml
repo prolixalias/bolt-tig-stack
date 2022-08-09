@@ -1,8 +1,15 @@
 name: tig
+
+analytics: false
+
 plans:
 - tig 
 
 modules:
   - puppet-grafana
-  - quadriq-influxdb
   - puppet-telegraf
+  - puppetlabs-influxdb
+  - puppet-trusted_ca
+  - git: https://github.com/prolixalias/puppet-hostname.git
+    ref: 'feature_epp_and_minor_refactor'
+  # - quadriq-influxdb
