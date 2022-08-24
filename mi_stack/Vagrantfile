@@ -1,0 +1,92 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# TARGETS = 2
+
+# Vagrant.configure(TARGETS) do |config|
+#   config.vm.box = "centos/7"
+#   config.ssh.forward_agent = true
+#   config.vm.provider :vmware_desktop do |vmware|
+#     vmware.vmx["ethernet0.pcislotnumber"] = "32"
+#   end
+#   TARGETS.times do |i|
+#     config.vm.define "target#{i}" do |target|
+#       target.vm.hostname = "target#{i}" 
+#     end
+#   end
+# end
+
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+TARGETS = 2
+Vagrant.configure("2") do |config|
+
+  # config.vm.box = "puppetlabs/centos-7.2-64-nocm"
+  config.vm.box = "centos/7"
+
+  TARGETS.times do |i|
+    config.vm.define "target#{i}", primary: true do |target|
+
+      src_path = nil
+
+      if ARGV[0] == "up" or ARGV[0] == "reload" then
+          if ENV["ENV"] != "dev" then
+            puts("INFO: To create a VM that can mount sources from the host for development purposes")
+            puts("INFO: set 'ENV=dev'. E.g run vagrant with:")
+            puts("INFO: $ export ENV=dev; vagrant " + ARGV.join(" "))
+          else
+            src_path = File.dirname(__FILE__) + "/src/"
+            puts("INFO: 'ENV=dev' so " + src_path + " will be mounted in the app VM as /src")
+          end
+      end
+
+      # Let vagrant create a 192.168.66.0/24 network and add a second nic to the VM for it
+      # The VM will have two NICs:
+      # - The default NIC with a DHCP address, this is the NIC that will be used when "vagrant ssh app.stepup.example.com"
+      # -
+      # app.vm.network :private_network, ip: "192.168.66.3"
+
+      # VMWare fusion specific configuration
+      target.vm.provider "vmware_fusion" do |vmware|
+
+        # Setup an additional shared folder for mounting the sources from the host
+        #
+        # Note that you must to use the vagrant commands vor starting / resuming the VM to get the mount
+        # reinstated. A reboot from the VM will not suffice. Use:
+        # "vagrant up" to start the VM
+        # "vagrant reload" to reboot the VM
+        # "vagrant halt" to stop the VM
+
+        if src_path != nil then
+          target.vm.synced_folder src_path, "/src"#, :mount_options => ["dmode=777","fmode=666"]
+        end
+
+        # Required in for composer
+        vmware.vmx["memsize"] = "4096"
+
+        vmware.vmx["numvcpus"] = "2"
+        #vmware.gui = true
+
+        # There is a conflict between the way vagrant configures the additional NIC in the VM and the
+        # way the NIC's are setup in the box.
+        # The puppetlabs box was created using packer, and it uses the default .vmx configuration included
+        # with packer. This .vmx has one e1000 ethernet NIC (ethernet0) in PCI slot 33 with 'connectiontype = "nat"'.
+        # This NIC becomes ens33 in the VM. The box has a corresponding /etc/sysconfig/network-scripts/ifcfg-ens33
+        # setup for DHCP. This works fine in the default setup. However, we want to add another NIC with a fixed IP
+        # on a host based network so we can connect to other VMs that run on the host on a known IP.
+        # We still need the "default" (DHCP) NIC to access the internet for ntp, downloading rpm's composer etc.
+        #
+        # The problem is that Vagrant adds the second NIC as ens33, overwriting /etc/sysconfig/network-scripts/ifcfg-ens33
+        # with the config for the new NIC.
+        # We fix this by a moving the default NIC to PCI slot 32 (ens32 in the VM). Vagrant will setup the
+        # new nic for PCI slot33 and configure it in the VM as ens33
+
+        vmware.vmx["ethernet0.pciSlotNumber"] = "32"
+
+        # We'll use the Ansible provisioner to create a config for the default NIC in
+        # /etc/sysconfig/network-scripts/ifcfg-ens32
+      end
+    end
+  end
+end

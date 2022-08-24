@@ -40,7 +40,7 @@
 #   xxx
 
 #
-class tig::influxdb (
+class mi::influxdb (
   Array $bucket_labels,
   Boolean $manage_repo,
   Boolean $manage_setup,

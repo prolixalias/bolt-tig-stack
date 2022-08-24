@@ -1,0 +1,72 @@
+name: mi
+
+analytics: false
+
+plans:
+- mi
+
+modules:
+  - choria-choria
+  - choria-mcollective
+  - choria-mcollective_agent_bolt_tasks
+  - choria-mcollective_agent_filemgr
+  - choria-mcollective_agent_iptables
+  - choria-mcollective_agent_nettest
+  - choria-mcollective_agent_nrpe
+  - choria-mcollective_agent_package
+  - choria-mcollective_agent_process
+  - choria-mcollective_agent_puppet
+  - choria-mcollective_agent_puppetca
+  - choria-mcollective_agent_service
+  - choria-mcollective_agent_shell
+  - choria-mcollective_choria
+  - choria-mcollective_data_sysctl
+  - choria-mcollective_util_actionpolicy
+  - gentoo-portage
+  - herculesteam-augeasproviders_core
+  - herculesteam-augeasproviders_sysctl
+  - puppet-archive
+  - puppet-consul
+  - puppet-extlib
+  - puppet-ferm
+  - puppet-gitlab
+  - puppet-grafana
+  - puppet-make
+  - puppet-nginx
+  - puppet-prometheus
+  - puppet-r10k
+  - puppet-redis
+  - puppet-selinux
+  - puppet-systemd
+  - puppet-telegraf
+  - puppetlabs-apache
+  - puppetlabs-apt
+  - puppetlabs-ca_extend
+  - puppetlabs-concat
+  - puppetlabs-firewall
+  - puppetlabs-git
+  - puppetlabs-hocon
+  - puppetlabs-influxdb
+  - puppetlabs-inifile
+  - puppetlabs-postgresql
+  - puppetlabs-powershell
+  - puppetlabs-puppet_authorization
+  - puppetlabs-puppetdb
+  - puppetlabs-stdlib
+  - puppetlabs-vcsrepo
+  - puppetlabs/xinetd
+  - richardc-datacat
+  - saz-memcached
+  - saz/ssh
+  - theforeman-dhcp
+  - theforeman-dns
+  - theforeman-foreman
+  - theforeman-foreman_proxy
+  - theforeman-puppet
+  - theforeman-puppetserver_foreman
+  - theforeman-tftp
+  - git: https://github.com/prolixalias/puppet-hostname.git  
+    ref: 'feature_epp_and_minor_refactor'
+
+apply-settings:
+  ssldir: /etc/puppetlabs/puppet/ssl

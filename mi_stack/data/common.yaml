@@ -1,0 +1,65 @@
+---
+
+lookup_options:
+  mi::dashboards::influxdb_password:
+    convert_to: "Sensitive"
+  mi::influxdb::password:
+    convert_to: "Sensitive"
+  mi::telegraph::influxdb_password:
+    convert_to: "Sensitive"
+  mi::influxdb::token:
+    convert_to: "Sensitive"
+
+mi::dashboards::grafana_password: "%{lookup('tig::grafana::password')}"
+mi::dashboards::grafana_url: "%{lookup('tig::grafana::url')}"
+mi::dashboards::grafana_user: "%{lookup('tig::grafana::user')}"
+mi::dashboards::influxdb_database: "%{lookup('tig::influxdb::database')}"
+mi::dashboards::influxdb_password: "%{lookup('tig::influxdb::password')}"
+mi::dashboards::influxdb_username: "%{lookup('tig::influxdb::username')}"
+
+mi::grafana::cfg_app_mode: 'production'
+mi::grafana::cfg_database_name: 'grafana'
+mi::grafana::cfg_database_type: 'sqlite3'
+mi::grafana::cfg_server_http_port: 8080
+mi::grafana::password: 'boltIsAwesome'
+mi::grafana::url: 'http://localhost:8080'
+mi::grafana::user: 'bolt'
+
+mi::influxdb::bucket: 'bolt'
+mi::influxdb::bucket_labels:
+  - 'bolt'
+  - 'monitoring'
+mi::influxdb::domain: 'rybamarine.com'
+mi::influxdb::host: 'localhost' # 'target0.rybamarine.com'
+mi::influxdb::manage_repo: true
+mi::influxdb::manage_setup: true
+mi::influxdb::manage_ssl: true
+mi::influxdb::org: 'puppetlabs'
+# mi::influxdb::package_archive_source: = 'https://dl.influxdata.com/influxdb/releases/influxdb2-2.3.0-linux-amd64.tar.gz',
+mi::influxdb::package_repo_name: 'influxdb2'
+mi::influxdb::package_version: '2.3.0-1'
+mi::influxdb::password: 'hunter2'
+mi::influxdb::port: 8086
+mi::influxdb::ssl_ca_file: "/etc/letsencrypt/config/archive/target0.rybamarine.com/fullchain1.pem" # '/etc/influxdb/ca.pem'
+mi::influxdb::ssl_cert_file: "/etc/letsencrypt/config/archive/target0.rybamarine.com/cert1.pem" # '/etc/influxdb/cert.pem'
+mi::influxdb::ssl_key_file: "/etc/letsencrypt/config/archive/target0.rybamarine.com/privkey1.pem" # '/etc/influxdb/key.pem'
+mi::influxdb::token: 'fIMU7UTYTJW4i20ecuG8MlaopGHCuy9naTqXFgXAbYk7DPzt5hf7Jo8Ghi5hmzXczOhPYij8p3fC87pKcoYx5237mgYqpnVBcGIS'
+mi::influxdb::token_file: '/root/.influxdb_token'
+mi::influxdb::use_ssl: true
+mi::influxdb::username: 'bolt'
+
+mi::telegraf::influxdb_database: "%{lookup('tig::influxdb::database')"
+mi::telegraf::influxdb_password: "%{lookup('tig::influxdb::password')"
+mi::telegraf::influxdb_username: "%{lookup('tig::influxdb::username')"
+mi::telegraf::inputs:
+  - 'cpu':
+    percpu: true
+    totalcpu: true
+  - 'disk'
+  - 'io'
+  - 'kernel'
+  - 'mem'
+  - 'net'
+  - 'processes'
+  - 'swap'
+  - 'system'

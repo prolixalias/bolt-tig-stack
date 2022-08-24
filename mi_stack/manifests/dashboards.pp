@@ -14,7 +14,7 @@
 #   xxx
 
 #
-class tig::dashboards (
+class mi::dashboards (
   Sensitive[String[1]] $influxdb_password,
   String $grafana_password,
   String $grafana_url,

@@ -13,7 +13,7 @@
 # @param [String] user
 #   xxx
 #
-class tig::grafana (
+class mi::grafana (
   Integer $cfg_server_http_port,
   String $cfg_app_mode,
   String $cfg_database_name,

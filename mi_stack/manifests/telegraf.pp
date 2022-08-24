@@ -12,7 +12,7 @@
 #   xxx
 
 #
-class tig::telegraf (
+class mi::telegraf (
   Array $inputs,
   Sensitive[String[1]] $influxdb_password,
   String $influx_host,

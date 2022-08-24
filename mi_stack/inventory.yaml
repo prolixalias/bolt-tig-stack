@@ -1,7 +1,9 @@
 ---
+
 version: 2
+
 groups:
-  - name: dashboard
+  - name: server
     targets: 
     - target0
   - name: agents
